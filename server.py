@@ -79,8 +79,10 @@ def hello():
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     '''update the entities via this interface'''
-    for key, value in flask_post_json().items():
-        myWorld.update(entity, key, value)
+    post_data = flask_post_json()
+    print(post_data)
+    for key in post_data:
+        myWorld.update(entity, key, post_data[key])
     myWorldJsonEntity = jsonify(myWorld.get(entity))
 
     return myWorldJsonEntity
@@ -89,7 +91,7 @@ def update(entity):
 def world():
     '''you should probably return the world here'''
     myWorldJSON = jsonify(myWorld.world())
-    
+
     return myWorldJSON
 
 @app.route("/entity/<entity>")    
@@ -102,7 +104,7 @@ def get_entity(entity):
 def clear():
     '''Clear the world out!'''
     myWorld.clear()
-    myWorldJSON = myWorld.world()
+    myWorldJSON = jsonify(myWorld.world())
     return myWorldJSON
 
 if __name__ == "__main__":
